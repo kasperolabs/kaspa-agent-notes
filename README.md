@@ -18,14 +18,14 @@ Written from building and running wallets, hosted wallets with outside watchers,
 - A read-only page (explorer, price display, dashboard): 00, 12 section 1, 09, 05.
 - A hosted wallet, payment processor, bot or keeper (your server holds a key): 00, 14, 01, 11, 12, 07, then the rest as needed.
 - An indexer or explorer: 00, 14, 05, 09, 12, 13.
-- A token launcher or market: 00, 04, 05, 06, 14.
+- A token launcher or market: 00, 17, 05, 04, 06, 14.
 
 ## Index
 
 | File | What's in it |
 |---|---|
 | [00-agent-rules.md](00-agent-rules.md) | Non-negotiable rules for an agent: never touch seeds or keys, SIGHASH_ALL only, red-team before mainnet, never call anything "safe"; how strict to be for each kind of app; what to ask and tell the user. **Read first.** |
-| [01-wallet-safety.md](01-wallet-safety.md) | How users lose money: seeds on a laptop, drainer patterns, partial signatures, wrong network, account switches, token cells and the KAS balance, icon IP leaks, lookalike tokens, HD balances and addresses, message signing, anti-scam design, what to recommend to users. |
+| [01-wallet-safety.md](01-wallet-safety.md) | How users lose money: seeds on a laptop, drainer patterns, partial signatures, wrong network, account switches, token cells and the KAS balance, icon IP leaks, lookalike tokens, HD balances and addresses, message signing, anti-scam design, a checklist for showing tokens in a wallet (token KAS, unverified tokens, icons, metadata), what to recommend to users. |
 | [02-sending-and-signing-kas.md](02-sending-and-signing-kas.md) | Building, signing and broadcasting from code: SDK and node traps, the real fee rule (compute vs storage mass), small-output limits, sequence and lockTime, sig op counts, RPC subscriptions and reconnects, the legacy wallet SDK, full-spend sweeps and exact-amount sends, wallet APIs (Kasware, Kaspire, Kastle), assembling a covenant spend, many coins at one address. |
 | [03-silverscript-v1-gotchas.md](03-silverscript-v1-gotchas.md) | SilverScript v1 syntax and traps: strict types, three time-lock domains and their compiled shapes, Kaspa's opcode table, dispatch tags, script public key prefixes, the 15 sig op mempool limit, constructor argument JSON, stateful contracts, script size cost. |
 | [04-covenant-design-patterns.md](04-covenant-design-patterns.md) | How to design covenants: sentences first, 16 principles that prevent every bug seen so far, worked patterns (vault, escrow, HTLC and password gift, recurring payment, pledge, revenue split, payment escrow, miner drip, airlock vault and its setup checks, rolling limits, shared budgets), covenant IDs and lineage, covenants that hold tokens, covenant page UX. |
@@ -41,6 +41,7 @@ Written from building and running wallets, hosted wallets with outside watchers,
 | [14-sdk-cookbook.md](14-sdk-cookbook.md) | The WASM SDK pieces you actually need and working code for each job: getting the SDK, connecting, reading coins and the DAA clock, sending KAS, signing a transaction someone else built, broadcasting, spending a covenant coin with `kaspa-ksm`, following addresses live, units and addresses, the legacy wallet SDK. |
 | [15-multi-wallet-support.md](15-multi-wallet-support.md) | Supporting several wallets: one adapter per wallet, a capability table (who can send, sign a login, sign a covenant input), detection, connect calls for Kasware, Kastle and Kaspire, login by signed challenge, keeping the session on the wallet's account, hosted web wallets, phone wallets by QR, testing. |
 | [16-accepting-payments.md](16-accepting-payments.md) | Taking a KAS payment in a shop, tip jar or paywall: receiving addresses, telling orders apart, wallet, QR and hosted-wallet flows, checking payment on chain, how long to wait, order rules, tokens. |
+| [17-token-launchers.md](17-token-launchers.md) | Building a token launcher: name and ticker rules (reserved names, lookalike folding, first come first served), stripping HTML and invisible characters from open fields, image re-encoding and no SVG, what goes on chain at genesis, program powers, the launch flow, spam, a checklist. |
 
 ## Tools referenced
 

@@ -1,6 +1,6 @@
 # Kaspa builder notes for AI agents
 
-> Kaspa builder knowledge for AI coding agents: wallet safety, signing KAS, SilverScript covenants, KCC-20 tokens, red-teaming before deploy, nodes, payments, multi-wallet support, error lookups and real mainnet mistakes. Read 00-agent-rules.md first.
+> Kaspa builder knowledge for AI coding agents: wallet safety, signing KAS, SilverScript covenants, KCC-20 tokens, token launchers, red-teaming before deploy, nodes, payments, multi-wallet support, error lookups and real mainnet mistakes. Read 00-agent-rules.md first.
 
 ## Files
 
@@ -21,6 +21,7 @@
 - [14. SDK cookbook: the calls that actually work](14-sdk-cookbook.md)
 - [15. Supporting several wallets](15-multi-wallet-support.md)
 - [16. Accepting a KAS payment](16-accepting-payments.md)
+- [17. Building a token launcher](17-token-launchers.md)
 
 ## Optional
 

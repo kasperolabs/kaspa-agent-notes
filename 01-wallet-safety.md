@@ -63,6 +63,32 @@ Rule for any wallet: SIGHASH_ALL only, and when a transaction spends the user's 
 - A name proves nothing. Two tokens can share name, ticker and image and differ only by covenant ID. Show the covenant ID (first 6 and last 6 hex characters at least) wherever a token is shown.
 - Some token programs give an issuer power over holders' coins (freeze, burn, seize, mint). That is a property of the program, not of the name. Show it.
 
+### Showing tokens in a wallet: checklist
+
+**The KAS inside tokens**
+- [ ] KAS carried in token cells is not in the KAS balance and is never picked as a fee or payment coin. If you show it, show it apart ("0.5 KAS held in token coins").
+- [ ] A "combine" action merges a user's small cells of one token and gives the spare KAS back (one merge of six cells returned 1.29 KAS on mainnet). A merge of a single cell into itself is refused; it only burns a fee.
+- [ ] Tokens are left out of the account total and net worth, or shown in their own total. A thin market can move a price hard on one small trade.
+
+**Which tokens to show.** Unpinned tokens (programs your indexer has not reviewed) are the normal state of a new token, not proof of a scam: every new launcher ships its own cell variant. Two approaches are valid; pick one and say which in your docs.
+- **Label and fold.** Show every token. Pinned and verified tokens on the main list; unpinned ones in a folded "Unverified" section. Users never lose sight of something they hold.
+- **Hide by default, with a switch.** The main view shows only pinned and verified tokens; a setting ("Show unverified tokens") reveals the rest. A cleaner screen and fewer lures, at the cost of users thinking a real token is missing.
+
+Either way:
+- [ ] Never delete an unpinned token from your data, and say on screen how many are folded or hidden.
+- [ ] No price or value is shown for an unpinned token.
+- [ ] Sending it needs the builder for its exact program; never the reference builder by guesswork (`05-kcc20-tokens.md` section 12).
+- [ ] Signing anything that moves it shows a warning and names the token.
+
+**Every token**
+- [ ] Tokens that arrive unasked go to a "received, not requested" place, outside the main list.
+- [ ] Icons fetched by your server, typed from their bytes, re-encoded, pinned by hash and served by you; SVG never rendered.
+- [ ] Name, ticker and description shown as plain text; links shown as text, never clickable.
+- [ ] The covenant ID is shown beside the name (first 6 and last 6 hex characters at least). The official mark and lookalike warnings come from a source you name.
+- [ ] Amounts use the token's own decimals (some tokens have 0).
+- [ ] The approval page names every token leaving the wallet, including token inputs an app added.
+- [ ] Arrivals come from an indexer or the virtual chain, since token cells never touch the holder's address (`05-kcc20-tokens.md` section 12).
+
 ## 5. Addresses
 
 - `kaspa:q…` is a plain key address (P2PK). `kaspa:p…` is a script address (P2SH): a covenant. `kaspatest:` is testnet. Never let a user send mainnet KAS to a `kaspatest:` address or the reverse.
