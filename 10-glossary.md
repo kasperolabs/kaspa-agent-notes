@@ -35,6 +35,10 @@ Short definitions, in the sense used throughout this library.
 - **CLTV / CSV**: check-lock-time-verify (absolute, 0xb0 on Kaspa) and check-sequence-verify (relative, 0xb1 on Kaspa).
 - **Standardness**: mempool rules stricter than consensus (for example, at most 15 signature operations per P2SH input). Non-standard transactions are not relayed.
 - **wRPC Borsh**: the node's WebSocket RPC (port 17110 on mainnet), tied to the node's version. gRPC is 16110. **wRPC JSON** (18110) is slower but tolerant of version changes.
+- **Resolver**: the WASM SDK's built-in way to connect to a public node: `new RpcClient({ resolver: new Resolver(), networkId })`.
+- **REST API (api.kaspa.org)**: a public HTTP API over archival nodes for balances, transactions, history and the KAS price. Testnet-10 has its own at api-tn10.kaspa.org.
+- **Hosted web wallet**: a wallet whose key sits on the provider's servers; apps reach it by redirect login and approval pages, not by calling the page.
+- **Adapter (wallet)**: one small object per wallet with the same methods, so app code never branches on wallet names.
 - **UTXO index**: the node option `--utxoindex`, needed for address balances and subscriptions.
 - **`.ksm`**: Kaspa Spend Map, a portable covenant file (npm `kaspa-ksm`).
 - **Red team**: adversarial testing of a covenant before deploy (`kaspa-redteam`).

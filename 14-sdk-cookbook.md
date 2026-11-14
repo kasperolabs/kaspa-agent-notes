@@ -43,7 +43,7 @@ That is the whole list for sending, signing, covenant spends and reading coins. 
 
 ```js
 const NETWORK = 'mainnet';                      // or 'testnet-10'
-const NODE = process.env.KASPA_BORSH || 'ws://127.0.0.1:17110';   // wRPC Borsh, your own node
+const NODE = process.env.KASPA_BORSH || null;   // your own node, e.g. 'ws://127.0.0.1:17110'; unset = public nodes
 
 function withTimeout(p, ms, label) {
   let t;
@@ -52,7 +52,9 @@ function withTimeout(p, ms, label) {
 }
 
 async function withRpc(fn) {
-  const rpc = new kaspa.RpcClient({ url: NODE, encoding: kaspa.Encoding.Borsh, networkId: NETWORK });
+  const rpc = NODE
+    ? new kaspa.RpcClient({ url: NODE, encoding: kaspa.Encoding.Borsh, networkId: NETWORK })   // your own node
+    : new kaspa.RpcClient({ resolver: new kaspa.Resolver(), networkId: NETWORK });               // a public node
   await withTimeout(rpc.connect(), 20000, 'node connect');
   try {
     const info = await rpc.getInfo();
@@ -65,6 +67,7 @@ async function withRpc(fn) {
 }
 ```
 
+- Without `KASPA_BORSH` set, the SDK's `Resolver` picks a public node (the pattern of rusty-kaspa's own examples). That is enough for apps whose server holds no key (`00-agent-rules.md`, "How strict to be"). Set your own node when the server signs or watches.
 - 17110 is wRPC Borsh, 16110 is gRPC. A WebSocket client pointed at 16110 hangs with no error.
 - A short-lived client per operation (as above) is fine for occasional sends. A busy service keeps one long-lived client per process instead (section 9). Never one per request without a `disconnect()`; that fills the node's client cap.
 - Put a timeout on every call. A call that never returns will hold up everything queued behind it.
@@ -162,7 +165,7 @@ function signInputs(txJsonString, privKeyHex, indexes) {
 
 - `SighashType.All` only, for anything that came from outside your own code (`01-wallet-safety.md`).
 - For a P2PK input, `41<sig>01` is the complete signature script. For a covenant input it is one argument; the app adds the other arguments, the dispatch tag and the redeem script (section 8).
-- Before signing coins the app says are the user's, look each outpoint up on your own node (section 4) and compare amount and script. Refuse if anything differs.
+- Before signing coins the app says are the user's, look each outpoint up on a node you trust (section 4) and compare amount and script. Refuse if anything differs.
 - If you sign for other apps, sign and return. Do not broadcast for them.
 
 ## 7. Broadcasting a finished transaction
@@ -263,7 +266,9 @@ class Follower {
       try { this.rpc.removeAllListeners?.(); } catch (_) {}
       this.rpc = null;
     }
-    const rpc = this.rpc = new kaspa.RpcClient({ url: NODE, encoding: kaspa.Encoding.Borsh, networkId: NETWORK });
+    const rpc = this.rpc = NODE
+      ? new kaspa.RpcClient({ url: NODE, encoding: kaspa.Encoding.Borsh, networkId: NETWORK })
+      : new kaspa.RpcClient({ resolver: new kaspa.Resolver(), networkId: NETWORK });
 
     // Register listeners BEFORE connecting and subscribing. Payloads arrive under event.data.
     rpc.addEventListener('connect', () => { this.connected = true; });

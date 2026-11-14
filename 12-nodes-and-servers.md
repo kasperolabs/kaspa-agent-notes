@@ -2,9 +2,26 @@
 
 The unglamorous part. Every item here took a wallet, a watcher or a payment flow down at least once, Sept 2025 to Nov 2026. rusty-kaspa 2.1.0 unless stated.
 
-## 1. Your own node
+## 1. Public nodes, the REST API, or your own node
 
-- **Run your own node for anything that moves money.** Public endpoints change, rate-limit and go down. Build kaspad from source at a release tag and keep the WASM SDK from the same release (`02-sending-and-signing-kas.md`).
+**Most apps do not need their own node.** If your server holds no key (the user's wallet signs), public infrastructure is enough. See the tiers in `00-agent-rules.md`, "How strict to be".
+
+Public sources (Nov 2026):
+
+- **Public nodes through the SDK's `Resolver`.** The WASM SDK picks a public node for you: `new kaspa.RpcClient({ resolver: new kaspa.Resolver(), networkId: 'mainnet' })`, then `await rpc.connect()` (the pattern of rusty-kaspa's own examples, `wasm/examples`). Check `getInfo()` for `isSynced` and `isUtxoIndexed` before relying on it, and reconnect through the resolver when a node drops.
+- **The REST API at api.kaspa.org.** Address balances, UTXOs, transactions and their history, block times, the KAS price (`/info/price`). Docs at api.kaspa.org/docs. It is backed by archival nodes, so it can serve old transactions a pruned node cannot. It is rate-limited: cache answers, and back off on 429.
+- **Prices.** For the KAS price: CoinGecko or api.kaspa.org `/info/price`. For KCC-20 tokens: CoinGecko lists some (NACHO is there); kascov.io reports prices calculated from the pools it can see (`https://kascov.io/data/<network>/…`). Name the source and the time next to every price, and show "unavailable" when the sources fail (`09-verify-and-read-the-chain.md` section 5).
+- **Testnet-10** (the live Toccata testnet): faucet `https://faucet-tn10.kaspanet.io`, explorer `https://explorer-tn10.kaspa.org`, REST API `https://api-tn10.kaspa.org` (as listed on wiki.kaspa.org/en/testnets; check they answer before sending a user there). Testnet addresses start with `kaspatest:`.
+
+Run your own node when:
+
+- your server holds a key or users' money (`11-hot-keys-signers-watchers.md`);
+- you run a watcher, an indexer or a keeper that must not go blind when a public node does;
+- you need `subscribeUtxosChanged` on many addresses, the full virtual chain, or a rate no public service gives you.
+
+The rest of this section is for running your own:
+
+- Build kaspad from source at a release tag and keep the WASM SDK from the same release (`02-sending-and-signing-kas.md`).
 - **`--utxoindex` is required** for `getUtxosByAddresses`, balance queries and `subscribeUtxosChanged`. Without it, address subscriptions do not work.
 - RPC listeners: `--rpclisten=<ip>:16110` (gRPC), `--rpclisten-borsh=<ip>:17110` (wRPC Borsh), `--rpclisten-json=<ip>:18110` (wRPC JSON). Bind to `127.0.0.1` for anything only the same box uses.
 - **Borsh is version-coupled; JSON is not.** A WASM SDK one release behind the node connects, answers `getInfo`, subscribes, then drops on the first notification it cannot decode, and reconnects forever. Match the SDK to the node, or use the JSON wRPC if you want something that survives node upgrades. (Proven on mainnet at the Toccata upgrade, June 2026.)
@@ -13,7 +30,7 @@ The unglamorous part. Every item here took a wallet, a watcher or a payment flow
 - **DNS seeders are not RPC servers.** A wallet library defaulted to `seeder1.kaspad.net:16110` for RPC; sends hung. Point every client at a node you chose, in one constant, and check which constant the running code actually reads.
 - Decide which node is public and which is private. Keep the node your money paths depend on firewalled to your own boxes; offer a different one to the community if you want to.
 - Upgrades: `git fetch --tags`, check out the release tag, `cargo build --release --bin kaspad`, restart the unit, follow `journalctl -u kaspad -f`. Know which binary your systemd unit runs; a stray copy in `/usr/local/bin` is a classic confusion.
-- Testnet: testnet-10 is the live Toccata testnet (Nov 2026). Run it as its own unit with its own data dir and ports (for example gRPC 16210, Borsh 17210, JSON 18210, P2P 16211) so it never collides with mainnet.
+- Testnet: testnet-10 is the live Toccata testnet (Nov 2026). If you run your own testnet node, run it as its own unit with its own data dir and ports (for example gRPC 16210, Borsh 17210, JSON 18210, P2P 16211) so it never collides with mainnet.
 
 ## 2. Disk
 

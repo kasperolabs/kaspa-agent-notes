@@ -91,7 +91,7 @@ Details in `11-hot-keys-signers-watchers.md`.
 
 Details in `12-nodes-and-servers.md`.
 
-- [ ] Own node with `--utxoindex`; SDK from the same release; RPC ports firewalled or `--rpcmaxclients` raised.
+- [ ] If your server holds a key or runs a watcher or indexer: own node with `--utxoindex`, SDK from the same release, RPC ports firewalled or `--rpcmaxclients` raised. Otherwise public nodes through the `Resolver` and the REST API are enough.
 - [ ] One shared RPC connection per process; a timeout on every node call.
 - [ ] All boxes on UTC (system, database, process manager).
 - [ ] SSH key-only, firewall on, public apps not running as root.

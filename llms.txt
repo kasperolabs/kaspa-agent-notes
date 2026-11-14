@@ -1,0 +1,27 @@
+# Kaspa builder notes for AI agents
+
+> Kaspa builder knowledge for AI coding agents: wallet safety, signing KAS, SilverScript covenants, KCC-20 tokens, red-teaming before deploy, nodes, payments, multi-wallet support, error lookups and real mainnet mistakes. Read 00-agent-rules.md first.
+
+## Files
+
+- [00. Rules for an AI agent helping someone build on Kaspa](00-agent-rules.md)
+- [01. Wallet safety](01-wallet-safety.md)
+- [02. Sending and signing KAS (and covenant spends)](02-sending-and-signing-kas.md)
+- [03. SilverScript v1: syntax and gotchas](03-silverscript-v1-gotchas.md)
+- [04. Designing covenants: principles and patterns](04-covenant-design-patterns.md)
+- [05. KCC-20 tokens: detect, pin, read metadata, trace lineage](05-kcc20-tokens.md)
+- [06. Red-team every .sil file before it holds real money](06-redteam-before-deploy.md)
+- [07. Deploy checklist](07-deploy-checklist.md)
+- [08. Failures log](08-failures-log.md)
+- [09. Verify before you trust: reading covenants from the chain](09-verify-and-read-the-chain.md)
+- [10. Glossary](10-glossary.md)
+- [11. Services that hold a key: hot wallets, signers, watchers](11-hot-keys-signers-watchers.md)
+- [12. Running nodes and servers for a Kaspa app](12-nodes-and-servers.md)
+- [13. Error messages, looked up](13-node-error-messages.md)
+- [14. SDK cookbook: the calls that actually work](14-sdk-cookbook.md)
+- [15. Supporting several wallets](15-multi-wallet-support.md)
+- [16. Accepting a KAS payment](16-accepting-payments.md)
+
+## Optional
+
+- [Everything in one file](llms-full.txt)

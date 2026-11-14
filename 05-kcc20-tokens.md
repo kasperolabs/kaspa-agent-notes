@@ -45,7 +45,7 @@ Pinning everything you know and ignoring the rest misses every new launcher: eac
 An indexer answer is a list of candidates. Before spending or showing a balance as final:
 
 1. The P2SH of the cell's redeem script equals the cell's address.
-2. The outpoint `txid:vout` is unspent in your own node's UTXO set at that address and carries the covenant ID you expect.
+2. The outpoint `txid:vout` is unspent on a node you trust (your own, or a public node through the `Resolver`) at that address and carries the covenant ID you expect.
 3. The state you read sits inside the redeem script, and the program around it is a pinned build.
 
 If any check fails, do not spend it and do not count it.
@@ -142,7 +142,8 @@ Label programs by **provable powers, not intent**. Use the same rule for everyon
 
 ## 11. Markets and prices
 
-- Prices must come from on-chain trades you can verify by txid. No invented USD price.
+- An app that only shows a token price can take it from a public source (kascov.io's pool-based figures, or CoinGecko for the tokens it lists) and name that source. The rules below are for building your own price index.
+- Your own index's prices must come from on-chain trades you can verify by txid. No invented USD price.
 - Generic trade detection works on any DEX: in one accepted transaction, token units move one way between two parties and KAS moves the other way. The counterparty is a covenant whose token delta and KAS delta have opposite signs. Charge the network fee to whoever funded it, outside the trade.
 - Exclude from the headline price: same-direction flows (liquidity add or remove), ambiguous transactions, wash trades (same key both sides), thin pools, plain wallet-to-wallet swaps.
 - Trust in tiers: reviewed programs, observed programs that meet evidence thresholds (several distinct traders, several fills, no single print far from the last), candidates listed only. Always say which tier and program a price came from.

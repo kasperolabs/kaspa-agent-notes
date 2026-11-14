@@ -8,10 +8,14 @@ Written from building and running wallets, hosted wallets with outside watchers,
 
 **If you are a person:** point your agent at this repository's URL and say "read the README, then the files relevant to what we're building, before writing any code." When something fails, paste the error and say "look it up in 13 first."
 
+**How strict to be depends on one question: does your server hold a key or users' money?** A read-only page or an app where the user's wallet signs can use public nodes and the public REST API, and should not add bank-grade steps that drive users away. Only services that hold keys need their own node, a watcher and a signer gate. The tiers are in `00-agent-rules.md`, "How strict to be".
+
 **Which files for what:**
 
-- A dApp page or covenant: 00, 14, 02, 03, 04, 06, 07.
+- A shop, tip jar or paywall: 00, 16, 15, 14, 01.
+- A dApp page or covenant: 00, 14, 15, 02, 03, 04, 06, 07.
 - A wallet (extension, mobile or web): 00, 14, 01, 02, 05, 09, 13.
+- A read-only page (explorer, price display, dashboard): 00, 12 section 1, 09, 05.
 - A hosted wallet, payment processor, bot or keeper (your server holds a key): 00, 14, 01, 11, 12, 07, then the rest as needed.
 - An indexer or explorer: 00, 14, 05, 09, 12, 13.
 - A token launcher or market: 00, 04, 05, 06, 14.
@@ -20,7 +24,7 @@ Written from building and running wallets, hosted wallets with outside watchers,
 
 | File | What's in it |
 |---|---|
-| [00-agent-rules.md](00-agent-rules.md) | Non-negotiable rules for an agent: never touch seeds or keys, SIGHASH_ALL only, red-team before mainnet, never call anything "safe", what to ask and tell the user. **Read first.** |
+| [00-agent-rules.md](00-agent-rules.md) | Non-negotiable rules for an agent: never touch seeds or keys, SIGHASH_ALL only, red-team before mainnet, never call anything "safe"; how strict to be for each kind of app; what to ask and tell the user. **Read first.** |
 | [01-wallet-safety.md](01-wallet-safety.md) | How users lose money: seeds on a laptop, drainer patterns, partial signatures, wrong network, account switches, token cells and the KAS balance, icon IP leaks, lookalike tokens, HD balances and addresses, message signing, anti-scam design, what to recommend to users. |
 | [02-sending-and-signing-kas.md](02-sending-and-signing-kas.md) | Building, signing and broadcasting from code: SDK and node traps, the real fee rule (compute vs storage mass), small-output limits, sequence and lockTime, sig op counts, RPC subscriptions and reconnects, the legacy wallet SDK, full-spend sweeps and exact-amount sends, wallet APIs (Kasware, Kaspire, Kastle), assembling a covenant spend, many coins at one address. |
 | [03-silverscript-v1-gotchas.md](03-silverscript-v1-gotchas.md) | SilverScript v1 syntax and traps: strict types, three time-lock domains and their compiled shapes, Kaspa's opcode table, dispatch tags, script public key prefixes, the 15 sig op mempool limit, constructor argument JSON, stateful contracts, script size cost. |
@@ -32,9 +36,11 @@ Written from building and running wallets, hosted wallets with outside watchers,
 | [09-verify-and-read-the-chain.md](09-verify-and-read-the-chain.md) | Verifying covenants yourself: what the chain shows and when, `kaspa-ksm` verify and its verdicts, rules for building a verifier, reading transactions, chain-first balances and history, prices, verifying payments. |
 | [10-glossary.md](10-glossary.md) | Short definitions of every term used here. |
 | [11-hot-keys-signers-watchers.md](11-hot-keys-signers-watchers.md) | For services that hold a key: what protects a hot key, a deny-by-default signer gate, money switches, approvals, passkeys and customer keys, watchers (trust, blindness, rescues, clocks), tripwires, the web app holes a pentest found, people and process. |
-| [12-nodes-and-servers.md](12-nodes-and-servers.md) | Running your own node (flags, client cap, version coupling), disk, process manager and env, Cloudflare and TLS, frontend dependencies, server basics. |
+| [12-nodes-and-servers.md](12-nodes-and-servers.md) | Public nodes (`Resolver`), the REST API, price sources and testnet links; when you need your own node and how to run it (flags, client cap, version coupling); disk, process manager and env, Cloudflare and TLS, frontend dependencies, server basics. |
 | [13-node-error-messages.md](13-node-error-messages.md) | Error messages from the node, the SDK, wallet extensions and the web stack, each with its meaning and fix. **Search here first when something is refused.** |
 | [14-sdk-cookbook.md](14-sdk-cookbook.md) | The WASM SDK pieces you actually need and working code for each job: getting the SDK, connecting, reading coins and the DAA clock, sending KAS, signing a transaction someone else built, broadcasting, spending a covenant coin with `kaspa-ksm`, following addresses live, units and addresses, the legacy wallet SDK. |
+| [15-multi-wallet-support.md](15-multi-wallet-support.md) | Supporting several wallets: one adapter per wallet, a capability table (who can send, sign a login, sign a covenant input), detection, connect calls for Kasware, Kastle and Kaspire, login by signed challenge, keeping the session on the wallet's account, hosted web wallets, phone wallets by QR, testing. |
+| [16-accepting-payments.md](16-accepting-payments.md) | Taking a KAS payment in a shop, tip jar or paywall: receiving addresses, telling orders apart, wallet, QR and hosted-wallet flows, checking payment on chain, how long to wait, order rules, tokens. |
 
 ## Tools referenced
 
@@ -59,6 +65,10 @@ Kaspa moves fast. Anything here about wallets, indexers, launchpads and APIs can
 ## Not an audit
 
 Nothing here is a security guarantee. It is what was learned on mainnet, written down so the next builder does not pay for the same lesson. Test with amounts you can lose.
+
+## For tools that open one file
+
+`AGENTS.md` and `llms.txt` point agents at the reading order. `llms-full.txt` is every file in one, generated from the markdown files; regenerate it after any change (the files are the source).
 
 ## Contributing
 
