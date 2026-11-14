@@ -1,0 +1,53 @@
+# 10. Glossary
+
+Short definitions, in the sense used throughout this library.
+
+- **KAS / sompi**: Kaspa's coin. 1 KAS = 100,000,000 sompi.
+- **UTXO / coin**: an unspent output. Every deposit to an address is its own coin. Addresses have coins, not balances.
+- **DAA score**: Kaspa's block clock. Mainnet: about 10 per second, 864,000 per day.
+- **Toccata**: the hardfork that enabled covenants (Covenants++, KIP-20 and related). Active on mainnet since June 30, 2026 (DAA 474,165,565).
+- **P2PK**: pay to a public key. Address `kaspa:q…`. Script `20 <32-byte x-only key> ac`.
+- **P2SH**: pay to a script hash. Address `kaspa:p…`. Script `aa20 <BLAKE2b-256 of the redeem script> 87`. Every covenant is a P2SH.
+- **Redeem script**: the full compiled covenant script, revealed when a coin is spent.
+- **Signature script (sigScript)**: what a spender supplies for an input: arguments, then (for SilverScript v1) a dispatch tag, then the redeem script.
+- **Covenant**: a P2SH whose script constrains how its coins may be spent (who, when, to where). Not a "smart contract".
+- **Spend path / entry**: one way to unlock a covenant. Declared with `entry name(...)` in SilverScript v1.
+- **Dispatch tag**: a 4-byte value per entry that selects the path in a v1 covenant.
+- **SilverScript / silverc**: Kaspa's covenant language and its compiler (github.com/kaspanet/silverscript). `.sil` files.
+- **Argent**: a higher-level language that compiles to SilverScript (`.ag` files; github.com/argent-lang).
+- **Constructor arguments**: values fixed at deploy (keys, amounts, times), part of the script and so of the address.
+- **State (stateful covenant)**: values kept inside the redeem script that change on each spend. The address changes with the state.
+- **KIP-20 covenant ID**: an optional binding on an output, born at a genesis and carried by continuations. The stable identity of a token or a stateful covenant.
+- **Genesis**: the transaction whose outputs carry a covenant ID that none of its inputs carry.
+- **Authorizing input**: the input that authorizes a transaction's bound outputs.
+- **Lineage**: a chain of coins linked by one covenant ID.
+- **KCC**: Kaspa Covenant Conventions (github.com/kaspanet/kccs). KCC-1: template layout and TemplateHash. KCC-20: fungible tokens. KCC-23: metadata in the prep transaction.
+- **Cell**: one coin of a KCC-20 token.
+- **Template / TemplateHash**: a program with its state removed (`prefix ‖ state ‖ suffix`), identified by BLAKE3 over the prefix and suffix with their lengths.
+- **Pin**: a recorded exact program build (prefix and suffix bytes, hash, origin) that an indexer recognizes.
+- **Owner scheme**: how a cell's owner field is checked (key, key hash, script hash, covenant ID).
+- **Borrow**: a reference-cell feature that lets others add to a cell without the owner's signature.
+- **Sighash type**: which parts of a transaction a signature covers. SIGHASH_ALL covers everything; others leave parts open for later changes.
+- **PSKT**: partially signed Kaspa transaction, the format wallets sign for apps.
+- **Compute / transient / storage mass**: Kaspa's three transaction weights. The relay fee is charged on compute and half of transient; storage mass is capped (500,000 g per transaction and per block) and ranks ordering, but is not charged at the floor.
+- **Relay floor**: 100 sompi per gram of fee mass.
+- **Sequence / lockTime**: per-input and per-transaction fields that satisfy relative (CSV) and absolute (CLTV) time locks. Both are signed.
+- **CLTV / CSV**: check-lock-time-verify (absolute, 0xb0 on Kaspa) and check-sequence-verify (relative, 0xb1 on Kaspa).
+- **Standardness**: mempool rules stricter than consensus (for example, at most 15 signature operations per P2SH input). Non-standard transactions are not relayed.
+- **wRPC Borsh**: the node's WebSocket RPC (port 17110 on mainnet), tied to the node's version. gRPC is 16110. **wRPC JSON** (18110) is slower but tolerant of version changes.
+- **UTXO index**: the node option `--utxoindex`, needed for address balances and subscriptions.
+- **`.ksm`**: Kaspa Spend Map, a portable covenant file (npm `kaspa-ksm`).
+- **Red team**: adversarial testing of a covenant before deploy (`kaspa-redteam`).
+- **Script engine**: rusty-kaspa's `kaspa-txscript` run locally to accept or refuse a spend without broadcasting.
+- **Keeper**: a bot that runs permissionless paths (releases, drips) for a fee.
+- **Watcher**: a service that monitors covenants and alerts their parties, and may run their emergency paths with its own key.
+- **Blind (watcher)**: a watcher that cannot see the chain tip. It looks alive unless its heartbeat carries the time of its last successful read.
+- **Airlock**: an intermediate covenant a withdrawal waits in for a fixed window, with an emergency path to a rescue wallet.
+- **Rescue wallet**: an address pinned in a covenant at creation, owned by the user outside the service, that emergency paths pay to.
+- **Hot key**: a key a server can use without a human. On a taken server, it is the attacker's.
+- **Signer gate**: one module every signature passes through, with a deny-by-default list of allowed transaction shapes, intent binding, velocity caps and a kill switch.
+- **Intent**: a record, made by an authenticated route, of who asked to pay whom how much; the signer compares the transaction with it.
+- **Shadow mode**: running a safety rule in log-only mode ("would have refused") before enforcing it.
+- **HD wallet / change address**: a wallet that derives many addresses from one seed and sends change to new ones; its balance is the sum over all of them.
+- **Dust**: a coin too small to be worth spending, or too small to create at all because of storage mass.
+- **Legacy `@kaspa/wallet`**: the older gRPC wallet SDK; still sends, but its fee defaults predate Toccata.
